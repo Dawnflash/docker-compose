@@ -1,0 +1,43 @@
+version: "2"
+services:
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Prague
+    volumes:
+      - /ssd-data/ombi:/config
+    ports:
+      - 3579:3579
+    restart: unless-stopped
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker 
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Prague
+      - PLEX_UID=1000
+      - PLEX_GID=100
+      - ALLOWED_NETWORKS=192.168.0.0/24
+      - VERSION=docker
+    network_mode: host
+    volumes:
+      - /ssd-data/plex:/config
+      - /ssd-data/plex:/transcode
+      - /Master/Media:/Media
+  tautulli:
+    image: tautulli/tautulli
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Prague
+    volumes:
+      - /ssd-data/tautulli:/config
+      - /ssd-data/plex/Library/Application Support/Plex Media Server/Logs:/logs
+    restart: unless-stopped
+    ports:
+     - 8181:8181
+
