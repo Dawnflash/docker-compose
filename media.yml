@@ -20,7 +20,8 @@ services:
       - TZ=Europe/Prague
       - PLEX_UID=1000
       - PLEX_GID=100
-      - ALLOWED_NETWORKS=192.168.0.0/24
+      # Home network, Docker bridge network
+      - ALLOWED_NETWORKS=192.168.0.0/24,172.18.0.0/16
       - VERSION=docker
     network_mode: host
     volumes:
