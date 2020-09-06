@@ -111,3 +111,37 @@ services:
       - /ssd-data/deluge/config:/config
       - /ssd-data/deluge/downloads:/downloads
     restart: unless-stopped
+  nzbhydra2:
+    image: linuxserver/nzbhydra2
+    container_name: nzbhydra2
+    environment:
+    - PUID=1000
+    - PGID=100
+    - TZ=Europe/Prague
+    volumes:
+    - /ssd-data/nzbhydra2/config:/config
+    - /ssd-data/nzbhydra2/downloads:/downloads
+    ports:
+    - 5076:5076
+    restart: unless-stopped
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'Europe/Prague'
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    # Volumes store your data between container upgrades
+    volumes:
+      - '/ssd-data/dns/pihole:/etc/pihole'
+      - '/ssd-data/dns/dnsmasq:/etc/dnsmasq.d'
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
