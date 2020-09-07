@@ -26,8 +26,8 @@ services:
       - TZ=Europe/Prague
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - /ssd-data/deluge/config:/config
-      - /ssd-data/deluge/downloads:/downloads
+      - /ssd-data/deluge:/config
+      - /ssd-data/downloads:/downloads
     network_mode: host
   ombi:
     image: linuxserver/ombi
@@ -89,9 +89,9 @@ services:
       - PGID=100
       - TZ=Europe/Prague
     volumes:
-      - /ssd-data/radarr/config:/config
+      - /ssd-data/radarr:/config
       - /Master/Media/Movies:/movies
-      - /ssd-data/radarr/downloads:/downloads
+      - /ssd-data/downloads:/downloads
     ports:
       - 7878:7878
     networks:
@@ -107,9 +107,9 @@ services:
       - PGID=100
       - TZ=Europe/Prague
     volumes:
-      - /ssd-data/sonarr/config:/config
+      - /ssd-data/sonarr:/config
       - /Master/Media/Series:/tv
-      - /ssd-data/sonarr/downloads:/downloads
+      - /ssd-data/downloads:/downloads
     ports:
       - 8989:8989
     networks:
