@@ -15,6 +15,19 @@ services:
       - /ssd-data/plex:/config
       - /ssd-data/plex:/transcode
       - /Master/Media:/Media
+    network_mode: host        
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Prague
+    volumes:
+      - /ssd-data/ombi:/config
+    ports:
+      - 3579:3579
     network_mode: host
   deluge:
     image: linuxserver/deluge
@@ -28,19 +41,6 @@ services:
     volumes:
       - /ssd-data/deluge:/config
       - /ssd-data/downloads:/downloads
-    network_mode: host
-  ombi:
-    image: linuxserver/ombi
-    container_name: ombi
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=Europe/Prague
-    volumes:
-      - /ssd-data/ombi:/config
-    ports:
-      - 3579:3579
     networks:
       media:
         ipv4_address: 172.20.0.2
