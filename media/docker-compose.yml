@@ -190,6 +190,10 @@ services:
       - /ssd-data/downloads:/downloads
     ports:
       - 8686:8686
+    networks:
+      media:
+        ipv4_address: 172.20.0.10
+        ipv6_address: 2a02:8308:33a:ea00:2::a
 
 networks:
   media:
