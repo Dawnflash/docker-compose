@@ -1,4 +1,4 @@
-version: "2"
+version: "2.1"
 services:
   plex:
     image: plexinc/pms-docker
@@ -184,6 +184,7 @@ services:
 networks:
   media:
     driver: bridge
+    enable_ipv6: true
     ipam:
       driver: default
       config:
