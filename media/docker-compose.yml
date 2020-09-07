@@ -41,6 +41,8 @@ services:
     volumes:
       - /ssd-data/deluge:/config
       - /ssd-data/downloads:/downloads
+    ports:
+      - 8112:8112
     networks:
       media:
         ipv4_address: 172.20.0.2
