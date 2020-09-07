@@ -172,10 +172,6 @@ services:
       - "67:67/udp"
       - "8080:80/tcp"
       - "8081:443/tcp"
-    # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    cap_add:
-      - NET_ADMIN
     networks:
       media:
         ipv4_address: 172.20.0.9
