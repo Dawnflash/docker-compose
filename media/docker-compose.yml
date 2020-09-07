@@ -176,6 +176,20 @@ services:
       media:
         ipv4_address: 172.20.0.9
         ipv6_address: 2a02:8308:33a:ea00:2::9
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Prague
+    volumes:
+      - /ssd-data/lidarr:/config
+      - /Master/Media/Music:/music
+      - /ssd-data/downloads:/downloads
+    ports:
+      - 8686:8686
 
 networks:
   media:
