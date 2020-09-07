@@ -1,8 +1,38 @@
 version: "2"
 services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Prague
+      - PLEX_UID=1000
+      - PLEX_GID=100
+        # Home network, Docker bridge network
+      - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
+      - VERSION=docker
+    volumes:
+      - /ssd-data/plex:/config
+      - /ssd-data/plex:/transcode
+      - /Master/Media:/Media
+    network_mode: host
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Prague
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - /ssd-data/deluge/config:/config
+      - /ssd-data/deluge/downloads:/downloads
+    network_mode: host
   ombi:
     image: linuxserver/ombi
     container_name: ombi
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -11,26 +41,14 @@ services:
       - /ssd-data/ombi:/config
     ports:
       - 3579:3579
-    restart: unless-stopped
-  plex:
-    container_name: plex
-    image: plexinc/pms-docker 
-    restart: unless-stopped
-    environment:
-      - TZ=Europe/Prague
-      - PLEX_UID=1000
-      - PLEX_GID=100
-      # Home network, Docker bridge network
-      - ALLOWED_NETWORKS=192.168.0.0/24,172.18.0.0/16
-      - VERSION=docker
-    network_mode: host
-    volumes:
-      - /ssd-data/plex:/config
-      - /ssd-data/plex:/transcode
-      - /Master/Media:/Media
+    networks:
+      media:
+        ipv4_address: 172.20.0.2
+        ipv6_address: 2a02:8308:33a:ea00:1::2
   tautulli:
     image: tautulli/tautulli
     container_name: tautulli
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -38,12 +56,16 @@ services:
     volumes:
       - /ssd-data/tautulli:/config
       - /ssd-data/plex/Library/Application Support/Plex Media Server/Logs:/logs
-    restart: unless-stopped
     ports:
      - 8181:8181
+    networks:
+      media:
+        ipv4_address: 172.20.0.3
+        ipv6_address: 2a02:8308:33a:ea00:1::3
   bazarr:
     image: linuxserver/bazarr
     container_name: bazarr
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -54,10 +76,14 @@ services:
       - /Master/Media/Series:/tv
     ports:
       - 6767:6767
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.4
+        ipv6_address: 2a02:8308:33a:ea00:1::4
   radarr:
     image: linuxserver/radarr
     container_name: radarr
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -68,10 +94,14 @@ services:
       - /ssd-data/radarr/downloads:/downloads
     ports:
       - 7878:7878
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.5
+        ipv6_address: 2a02:8308:33a:ea00:1::5
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -82,10 +112,14 @@ services:
       - /ssd-data/sonarr/downloads:/downloads
     ports:
       - 8989:8989
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.6
+        ipv6_address: 2a02:8308:33a:ea00:1::6
   jackett:
     image: linuxserver/jackett
     container_name: jackett
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=100
@@ -97,23 +131,14 @@ services:
       - /ssd-data/jackett/downloads:/downloads
     ports:
       - 9117:9117
-    restart: unless-stopped
-  deluge:
-    image: linuxserver/deluge
-    container_name: deluge
-    network_mode: host
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=Europe/Prague
-      - DELUGE_LOGLEVEL=error #optional
-    volumes:
-      - /ssd-data/deluge/config:/config
-      - /ssd-data/deluge/downloads:/downloads
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.7
+        ipv6_address: 2a02:8308:33a:ea00:1::7
   nzbhydra2:
     image: linuxserver/nzbhydra2
     container_name: nzbhydra2
+    restart: unless-stopped
     environment:
     - PUID=1000
     - PGID=100
@@ -123,25 +148,46 @@ services:
     - /ssd-data/nzbhydra2/downloads:/downloads
     ports:
     - 5076:5076
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.8
+        ipv6_address: 2a02:8308:33a:ea00:1::8
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "80:80/tcp"
-      - "443:443/tcp"
+    restart: unless-stopped
     environment:
       TZ: 'Europe/Prague'
+      VIRTUAL_HOST: 'nas.dawnflash.cz'
+      ServerIP: '172.20.0.9'
+      ServerIPv6: '2a02:8308:33a:ea00::1::9'
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     volumes:
       - '/ssd-data/dns/pihole:/etc/pihole'
       - '/ssd-data/dns/dnsmasq:/etc/dnsmasq.d'
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8080:80/tcp"
+      - "8081:443/tcp"
     # Recommended but not required (DHCP needs NET_ADMIN)
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
     cap_add:
       - NET_ADMIN
-    restart: unless-stopped
+    networks:
+      media:
+        ipv4_address: 172.20.0.9
+        ipv6_address: 2a02:8308:33a:ea00:1::9
+
+networks:
+  media:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
+        - subnet: 2a02:8308:33a:ea00:1::/80
+          gateway: 2a02:8308:33a:ea00:1::1
