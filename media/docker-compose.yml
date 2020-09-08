@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2"
 services:
   plex:
     image: plexinc/pms-docker
@@ -9,7 +9,7 @@ services:
       - PLEX_UID=1000
       - PLEX_GID=100
         # Home network, Docker bridge network
-      - ALLOWED_NETWORKS=192.168.0.0/24,172.18.0.0/24
+      - ALLOWED_NETWORKS=192.168.0.0/24,172.20.0.0/24
       - VERSION=docker
     volumes:
       - /ssd-data/plex:/config
@@ -32,8 +32,7 @@ services:
       - 8112:8112
     networks:
       media:
-        ipv4_address: 172.18.0.2
-        ipv6_address: fe80:14::2
+        ipv4_address: 172.20.0.2
   tautulli:
     image: tautulli/tautulli
     container_name: tautulli
@@ -49,8 +48,7 @@ services:
      - 8181:8181
     networks:
       media:
-        ipv4_address: 172.18.0.3
-        ipv6_address: fe80:14::3
+        ipv4_address: 172.20.0.3
   bazarr:
     image: linuxserver/bazarr
     container_name: bazarr
@@ -67,8 +65,7 @@ services:
       - 6767:6767
     networks:
       media:
-        ipv4_address: 172.18.0.4
-        ipv6_address: fe80:14::4
+        ipv4_address: 172.20.0.4
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -85,8 +82,7 @@ services:
       - 7878:7878
     networks:
       media:
-        ipv4_address: 172.18.0.5
-        ipv6_address: fe80:14::5
+        ipv4_address: 172.20.0.5
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
@@ -103,8 +99,7 @@ services:
       - 8989:8989
     networks:
       media:
-        ipv4_address: 172.18.0.6
-        ipv6_address: fe80:14::6
+        ipv4_address: 172.20.0.6
   jackett:
     image: linuxserver/jackett
     container_name: jackett
@@ -122,8 +117,7 @@ services:
       - 9117:9117
     networks:
       media:
-        ipv4_address: 172.18.0.7
-        ipv6_address: fe80:14::7
+        ipv4_address: 172.20.0.7
   nzbhydra2:
     image: linuxserver/nzbhydra2
     container_name: nzbhydra2
@@ -139,8 +133,7 @@ services:
     - 5076:5076
     networks:
       media:
-        ipv4_address: 172.18.0.8
-        ipv6_address: fe80:14::8
+        ipv4_address: 172.20.0.8
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -148,7 +141,7 @@ services:
     environment:
       TZ: 'Europe/Prague'
       VIRTUAL_HOST: 'nas.dawnflash.cz'
-      ServerIP: '172.18.0.9'
+      ServerIP: '172.20.0.9'
       ServerIPv6: 'fe80:14::9'
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
@@ -163,8 +156,7 @@ services:
       - "8081:443/tcp"
     networks:
       media:
-        ipv4_address: 172.18.0.9
-        ipv6_address: fe80:14::9
+        ipv4_address: 172.20.0.9
   lidarr:
     image: linuxserver/lidarr
     container_name: lidarr
@@ -181,8 +173,7 @@ services:
       - 8686:8686
     networks:
       media:
-        ipv4_address: 172.18.0.10
-        ipv6_address: fe80:14::a
+        ipv4_address: 172.20.0.10
   nzbget:
     image: linuxserver/nzbget
     container_name: nzbget
@@ -198,8 +189,7 @@ services:
       - 6789:6789
     networks:
       media:
-        ipv4_address: 172.18.0.11
-        ipv6_address: fe80:14::b
+        ipv4_address: 172.20.0.11
   ombi:
     image: linuxserver/ombi
     container_name: ombi
@@ -214,17 +204,13 @@ services:
       - 3579:3579
     networks:
       media:
-        ipv4_address: 172.18.0.12
-        ipv6_address: fe80:14::c
+        ipv4_address: 172.20.0.12
 
 networks:
   media:
     driver: bridge
-    enable_ipv6: true
     ipam:
       driver: default
       config:
-        - subnet: 172.18.0.0/16
-          gateway: 172.18.0.1
-        - subnet: fe80:14::/112
-          gateway: fe80:14::1
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
