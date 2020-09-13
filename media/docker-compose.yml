@@ -148,8 +148,10 @@ services:
     environment:
       TZ: 'Europe/Prague'
       VIRTUAL_HOST: 'nas.dawnflash.cz'
-      ServerIP: '172.20.0.9'
-      ServerIPv6: 'fd14::9'
+      ServerIP: '192.168.0.115'
+      ServerIPv6: '2a02:8308:300:2100::abcd'
+      DNS1: 1.1.1.1
+      DNS2: 8.8.8.8
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     volumes:
