@@ -218,11 +218,27 @@ services:
       media:
         ipv4_address: 172.20.0.12
         ipv6_address: fd14::c
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    user: "1000"
+    environment:
+      #- GF_INSTALL_PLUGINS=<grafana_plugins_url>
+      - GF_LOG_MODE=console
+    volumes:
+      - /ssd-data/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      media:
+        ipv4_address: 172.20.0.13
+        ipv6_address: fd14::d
 
 networks:
   media:
     driver: bridge
-    enable_ipv6: true
+    enable_ipv6 : true
     ipam:
       driver: default
       config:
