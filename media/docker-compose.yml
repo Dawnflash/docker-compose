@@ -241,8 +241,10 @@ services:
     volumes:
       - /ssd-data/influxdb/data:/var/lib/influxdb
       - /ssd-data/influxdb/config:/etc/influxdb
+      - /usr/share/collectd:/usr/share/collectd
     ports:
-      - 8086:8086
+      - 8086:8086 # API
+      - 25826:25826/udp # CollectD
     networks:
       media:
         ipv4_address: 172.20.0.14
