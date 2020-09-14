@@ -218,37 +218,6 @@ services:
       media:
         ipv4_address: 172.20.0.12
         ipv6_address: fd14::c
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    restart: unless-stopped
-    user: "1000"
-    environment:
-      #- GF_INSTALL_PLUGINS=<grafana_plugins_url>
-      - GF_LOG_MODE=console
-    volumes:
-      - /ssd-data/grafana:/var/lib/grafana
-    ports:
-      - 3000:3000
-    networks:
-      media:
-        ipv4_address: 172.20.0.13
-        ipv6_address: fd14::d
-  influxdb:
-    image: influxdb
-    container_name: influxdb
-    restart: unless-stopped
-    volumes:
-      - /ssd-data/influxdb/data:/var/lib/influxdb
-      - /ssd-data/influxdb/config:/etc/influxdb
-      - /usr/share/collectd:/usr/share/collectd
-    ports:
-      - 8086:8086 # API
-      - 25826:25826/udp # CollectD
-    networks:
-      media:
-        ipv4_address: 172.20.0.14
-        ipv6_address: fd14::e
 
 networks:
   media:
