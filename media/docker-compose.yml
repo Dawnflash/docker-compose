@@ -218,19 +218,18 @@ services:
       media:
         ipv4_address: 172.20.0.12
         ipv6_address: fd14::c
-  # Install Graphite first
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
+  facette:
+    image: facette/facette
+    container_name: facette
     restart: unless-stopped
     user: "${DKR_UID}:${DKR_GID}"
-    environment:
-      #- GF_INSTALL_PLUGINS=<grafana_plugins_url>
-      - GF_LOG_MODE=console
     volumes:
-      - /ssd-data/grafana:/var/lib/grafana
+      - /ssd-data/facette/etc:/etc/facette
+      - /ssd-data/facette/var:/var/lib/facette
+      - /ssd-data/facette/cache:/var/cache/facette
+      - /var/lib/rrdcached:/var/lib/rrdcached
     ports:
-      - 3000:3000
+      - 12003:12003
     networks:
       media:
         ipv4_address: 172.20.0.13
