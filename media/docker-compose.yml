@@ -218,6 +218,21 @@ services:
       media:
         ipv4_address: 172.20.0.12
         ipv6_address: fd14::c
+  facette:
+    image: facette/facette
+    container_name: facette
+    restart: unless-stopped
+    user: "1000"
+    volumes:
+      - /ssd-data/facette/etc:/etc/facette
+      - /ssd-data/facette/var:/var/lib/facette
+    ports:
+      - 12003:12003
+    networks:
+      media:
+        ipv4_address: 172.20.0.13
+        ipv6_address: fd14::d
+
 
 networks:
   media:
