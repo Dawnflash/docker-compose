@@ -234,7 +234,31 @@ services:
       media:
         ipv4_address: 172.20.0.13
         ipv6_address: fd14::d
-
+  bitwardenrs:
+    image: bitwardenrs/server:latest
+    container_name: bitwardenrs
+    restart: unless-stopped
+    user: "${DKR_UID}:${DKR_GID}"
+    environment:
+      - TZ=${DKR_TZ}
+      - IP_HEADER=X-Real-IP
+      - WEBSOCKET_ENABLED=true
+      - WEBSOCKET_PORT=12005
+      - LOG_FILE=/data/bitwarden.log
+      - LOG_LEVEL=warn
+      - SIGNUPS_ALLOWED=true
+      - ADMIN_TOKEN=${BITWARDEN_ADMIN_TOKEN}
+      - DOMAIN=${BITWARDEN_DOMAIN}
+      - ROCKET_PORT=12004
+    volumes:
+      - /ssd-data/bitwarden:/data
+    ports:
+      - 12004:12004
+      - 12005:12005
+    networks:
+      media:
+        ipv4_address: 172.20.0.14
+        ipv6_address: fd14::e
 
 networks:
   media:
