@@ -234,9 +234,9 @@ services:
       media:
         ipv4_address: 172.20.0.13
         ipv6_address: fd14::d
-  bitwardenrs:
-    image: bitwardenrs/server:latest
-    container_name: bitwardenrs
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
     restart: unless-stopped
     user: "${DKR_UID}:${DKR_GID}"
     environment:
